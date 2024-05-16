@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import rigoImage from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 import PeopleDispatcher from "../store/peopleDispatcher"
+import PlanetsDispatcher from "../store/planetsDispatcher";
 import Card from "../component/Card";
 import { Context } from '../store/appContext'
 
@@ -9,6 +9,7 @@ import { Context } from '../store/appContext'
 export const Home = () => {
 const { store, actions } = useContext(Context);
 	const [people, setPeople] = useState([])
+	const [planets, setPlanets] = useState([])
 	const Characters = async () => {
 		try { 
 			const response = await PeopleDispatcher()
@@ -16,24 +17,28 @@ const { store, actions } = useContext(Context);
 	catch (error){
 		console.log(error)
 	} }
+	const Planets = async () => {
+		try { 
+			const response = await PlanetsDispatcher()
+		setPlanets (response.results) }
+	catch (error){
+		console.log(error)
+	} }
 
 		useEffect(() => {
 			Characters()
+			Planets()
+
 			
 		}, [])
 
-		useEffect(() => {console.log(people)},[people])
-
+		
 		return (
-			<div className="text-center mt-5">
-				{/* {people.map((person)=>{<Card name={person.name}/>})} */}
-				{people.map((person,i)=> (<p onClick={()=> {
-					console.log(person)
-					actions.getDataPeople(person.uid)
-				}} key= {i}>{person.name}</p>
+			<div className="home_section">
+				{people.map((person, i)=>(<Card key={i} name={person.name}/>))}
+				{planets.map((planet, i)=>(<Card key={i} name={planet.name}/>))}
 				
-
-				))}
-
 			</div>)
+			
+		
 };
